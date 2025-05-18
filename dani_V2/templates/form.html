@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>다니 관리자 페이지</title>
+</head>
+<body>
+    <h1>📋 다니 문구 & 행동 설정</h1>
+
+    <!-- 📝 문구 입력 -->
+    <h2>📝 오늘의 문구 등록</h2>
+    <form method="post" action="/submit_message">
+        문구: <input type="text" name="message" required>
+        날짜: <input type="date" name="msg_date">
+        시작 시각: <input type="time" name="start_time">
+    종료 시각: <input type="time" name="end_time">
+        <button type="submit">추가</button>
+        <!---
+        <lable>
+            <input type="checkbox" name="is_reserved" value="yes" onchange="toggleTime(this)">
+            예약 등록
+        </lable>
+        <div id="time_input" style="display: none;">
+            시간: <input type="time" name="reserved_time">
+        </div>
+
+        <button type="submit">등록</button>
+        !--->
+    </form>
+
+    <script>
+        function toggleTime(checkbox){
+            document.getElementById("time_input").style.display = checkbox.checked ? "block" : "none";
+        }
+    </script>
+
+    <!-- 🎯 모드 설정 -->
+    <h2>🎯 문구 출력 모드</h2>
+    <form method="post" action="/set_mode">
+        <select name="mode">
+            <option value="random" {{ "selected" if mode == "random" else "" }}>랜덤</option>
+            <option value="latest" {{ "selected" if mode == "latest" else "" }}>최신</option>
+            <option value="sequence" {{ "selected" if mode == "sequence" else "" }}>순차</option>
+        </select>
+        <button type="submit">모드 저장</button>
+    </form>
+
+    <!-- 🐾 행동 설정 -->
+    <h2>🐾 다니 행동 설정</h2>
+    <form method="post" action="/submit_behavior">
+        행동 타입:
+        <select name="behavior_type">
+            <option value="IDLE">IDLE</option>
+            <option value="LEFT">LEFT</option>
+            <option value="RIGHT">RIGHT</option>
+        </select><br><br>
+
+
+
+
+        <select name="file_name">
+        <!-- assets 폴더에 있는 파일들을 동적으로 나열 -->
+        {% for file in files %}
+            <option value="{{ file }}">{{ file }}</option>
+        {% endfor %}
+    </select><br><br>
+    <button type="submit">행동 저장</button>
+</form>
+
+    <!-- 📚 오늘의 문구 리스트 -->
+    <h2>📚 오늘의 문구 목록</h2>
+    <ul>
+
+        {% for msg in messages %}
+            <li>
+
+            {{ msg.text }}
+
+            <form method="post" action="/edit_message" style="display:inline;">
+                <input type="hidden" name="id" value="{{ msg.id }}">
+                <input type="text" name="new_text" placeholder="수정할 문구">
+                <button type="submit">수정</button>
+            </form>
+            <form method="post" action="/delete_message" style="display:inline;">
+                <input type="hidden" name="id" value="{{ msg.id }}">
+                <button type="submit">삭제</button>
+            </form>
+
+            <td>
+                {% if msg.start_time == "00:00" and msg.end_time == "23:59" %}
+                    하루종일
+                {%  else %}
+                    {{ msg.start_time }} ~ {{ msg.end_time }}
+                {%  endif %}
+            </td>
+
+
+            </li>
+
+        {% endfor %}
+    </ul>
+
+    <p><strong>현재 선택된 문구:</strong> {{ selected }}</p>
+</body>
+</html>

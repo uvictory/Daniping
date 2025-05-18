@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Dani 알림 감지기",
+  "version": "1.0",
+  "description": "Chrome과 Edge에서 알림을 감지하여 다니와 연동합니다.",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "permissions": [
+    "scripting",
+    "tabs",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "http://192.168.50.3:10000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://192.168.50.3:10000/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+  {
+    "resources": ["inject.js"],
+    "matches": ["http://192.168.50.3:10000/*"]
+  }
+],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Dani 알림 감지"
+  }
+}

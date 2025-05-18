@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>다니 관리자</title>
+</head>
+<body>
+    <h2>📅 오늘 문구 등록</h2>
+    <form method="post">
+        <label>날짜 (선택):</label><br>
+        <input type="date" name="msg_date"><br><br>
+        <label>메시지:</label><br>
+        <textarea name="message" rows="3" cols="40" required></textarea><br><br>
+        <input type="submit" value="등록">
+    </form>
+
+    <hr>
+    <h3>📋 오늘 등록된 문구</h3>
+    {% if messages %}
+        <ul>
+            {% for msg in messages %}
+                <li>{{ msg }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>등록된 문구가 없습니다.</p>
+    {% endif %}
+
+    <h3>🔍 현재 출력 방식: {{ mode }}</h3>
+    <form method="post" action="/set_mode">
+    <button type="submit" name="mode" value="random">🎲 랜덤</button>
+    <button type="submit" name="mode" value="latest">🕓 마지막 등록</button>
+    <button type="submit" name="mode" value="sequence">📚 순차 전체</button>
+    </form>
+
+    <h3>🎯 현재 선택된 문구</h3>
+    <p><strong>{{ selected }}</strong></p>
+
+<form method="post" action="/set_behavior">
+    행동 타입: <input name="type" value="IDLE"><br>
+    행동 이름: <input name="name" value="mask"<br>
+    <button type="submit">설정</button>
+</form>
+</body>
+</html>
